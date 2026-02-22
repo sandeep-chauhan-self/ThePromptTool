@@ -1,4 +1,14 @@
+// ⚠️ IMPLEMENTATION RULES — NON-NEGOTIABLE:
+// 1. The TEACHING_INSTRUCTION string in teachingInstruction.js must be copied EXACTLY 
+//    from the plan. No summarizing, no paraphrasing, no shortening.
+// 2. Do not move the instruction inline. It lives in its own constants file.
+// 3. The Claude URL pattern is: https://claude.ai/new?q=${encoded}
+//    Do not alter this pattern.
+// 4. concatenation order: TEACHING_INSTRUCTION first, then rawPrompt. Never reversed.
+// 5. Do not add any text between TEACHING_INSTRUCTION and rawPrompt during concatenation.
+
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { TEACHING_INSTRUCTION } from './constants/teachingInstruction';
 import { usePrompt } from './hooks/usePrompt';
 
 /* ─── Header ─── */
@@ -126,15 +136,22 @@ function PromptCard({ prompt }) {
   }, [fullPromptText]);
 
   const handleTryOnClaude = useCallback(() => {
-    // Build the prompt to send to Claude
-    let queryText = '';
+    let rawPrompt = '';
     if (prompt.system_prompt && prompt.prompt_body) {
-      queryText = `${prompt.system_prompt}\n\n${prompt.prompt_body}`;
+      rawPrompt = `${prompt.system_prompt}\n\n${prompt.prompt_body}`;
     } else {
-      queryText = prompt.system_prompt || prompt.prompt_body;
+      rawPrompt = prompt.system_prompt || prompt.prompt_body;
     }
-    const encodedPrompt = encodeURIComponent(queryText);
-    window.open(`https://claude.ai/new?q=${encodedPrompt}`, '_blank', 'noopener,noreferrer');
+
+    // Step 1: Combine teaching instruction + original prompt verbatim
+    const fullPayload = TEACHING_INSTRUCTION + rawPrompt;
+
+    // Step 2: Encode for URL
+    const encoded = encodeURIComponent(fullPayload);
+
+    // Step 3: Open Claude with pre-filled prompt
+    const claudeUrl = `https://claude.ai/new?q=${encoded}`;
+    window.open(claudeUrl, '_blank');
   }, [prompt.system_prompt, prompt.prompt_body]);
 
   return (
@@ -185,6 +202,7 @@ function PromptCard({ prompt }) {
             title="Try this prompt on Claude"
           >
             🚀 Try on Claude
+            <span className="badge">🎓 Prompt Coach Mode</span>
           </button>
           <a
             href={prompt.source_url}

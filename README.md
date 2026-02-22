@@ -9,7 +9,8 @@
 - **Automated Ingestion**: High-fidelity scraper using Playwright to extract system and user prompts directly from Anthropic's technical documentation.
 - **Atomic Selection**: Proprietary selection logic using PostgreSQL `SKIP LOCKED` to ensure prompts are served exactly once across all sessions.
 - **Neon Codex UI**: A premium, "cyber-grimoire" inspired interface with typewriter reveals, theme toggling, and rich micro-animations.
-- **One-Click Execution**: Integrated "Try on Claude" functionality that pre-fills specialized prompts into the Claude.ai chat interface.
+- **Prompt Coach Mode**: Enhanced "Try on Claude" integration that prepends a professional prompt engineering pedagogy to help users learn the anatomy of elite prompts.
+- **One-Click Execution**: Integrated functionality that pre-fills specialized prompts into the Claude.ai chat interface.
 - **Flexible Reliability**: Built-in support for both PostgreSQL (Production/High Concurrency) and SQLite (Local Development/Lite Deployment).
 
 ---
@@ -44,12 +45,26 @@ ThePromptTool/
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- Git
+### Easy Start (Unified Commands)
 
-### 1. Backend Setup
+If you have Node.js and Python installed, you can manage the project from the root directory:
+
+```bash
+# Initial Setup
+npm run setup
+
+# Run Frontend
+npm run dev
+
+# Run Backend (separate terminal)
+npm run dev:backend
+```
+
+---
+
+### Manual Setup (Subdirectories)
+
+#### 1. Backend Setup
 ```bash
 cd backend
 python -m venv .venv
@@ -62,7 +77,7 @@ python scripts/scrape_prompts.py
 python app.py
 ```
 
-### 2. Frontend Setup
+#### 2. Frontend Setup
 ```bash
 cd frontend
 npm install

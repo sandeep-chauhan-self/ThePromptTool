@@ -1,3 +1,14 @@
+/*
+// ⚠️ IMPLEMENTATION RULES — NON-NEGOTIABLE:
+// 1. The TEACHING_INSTRUCTION string in teachingInstruction.js must be copied EXACTLY 
+//    from the plan. No summarizing, no paraphrasing, no shortening.
+// 2. Do not move the instruction inline. It lives in its own constants file.
+// 3. The Claude URL pattern is: https://claude.ai/new?q=${encoded}
+//    Do not alter this pattern.
+// 4. concatenation order: TEACHING_INSTRUCTION first, then rawPrompt. Never reversed.
+// 5. Do not add any text between TEACHING_INSTRUCTION and rawPrompt during concatenation.
+*/
+
 /* ================================================================
    DAILY PROMPT — "NEON CODEX" DESIGN SYSTEM
    ================================================================
@@ -643,6 +654,22 @@ body::before {
   box-shadow: var(--shadow-glow-intense);
   color: #FFFFFF;
   transform: scale(1.05);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-2);
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
 }
 
 /* === LOADING STATE — SKELETON === */
