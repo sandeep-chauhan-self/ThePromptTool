@@ -8,17 +8,34 @@
 // 5. Do not add any text between TEACHING_INSTRUCTION and rawPrompt during concatenation.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ValidatorView } from './components/ValidatorView';
 import { TEACHING_INSTRUCTION } from './constants/teachingInstruction';
 import { usePrompt } from './hooks/usePrompt';
 
 /* ─── Header ─── */
-function Header({ theme, onToggleTheme }) {
+function Header({ theme, onToggleTheme, currentView, onViewChange }) {
   return (
     <header className="header">
       <div className="header-logo">
         <span className="header-logo-icon">⚡</span>
         <span className="header-logo-text">Daily Prompt</span>
       </div>
+      
+      <nav className="header-nav">
+        <button 
+          className={`nav-tab ${currentView === 'daily' ? 'nav-tab--active' : ''}`}
+          onClick={() => onViewChange('daily')}
+        >
+          Daily Prompt
+        </button>
+        <button 
+          className={`nav-tab ${currentView === 'validator' ? 'nav-tab--active' : ''}`}
+          onClick={() => onViewChange('validator')}
+        >
+          Prompt Validator
+        </button>
+      </nav>
+
       <button
         className="theme-toggle"
         onClick={onToggleTheme}
@@ -295,19 +312,24 @@ function Footer() {
 
 /* ═══ APP ═══ */
 export default function App() {
-  const { status, prompt, stats, error, requestPrompt, reset } = usePrompt();
-
-  // Theme management
+  const { prompt, status, error, stats, requestPrompt, reset } = usePrompt();
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('dailyprompt-theme') || 'dark';
+      return localStorage.getItem('dailyprompt_theme') || 'dark';
     }
     return 'dark';
   });
+  const [currentView, setCurrentView] = useState('daily');
+
+  // Load initial prompt only on mount
+  useEffect(() => {
+    requestPrompt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('dailyprompt-theme', theme);
+    localStorage.setItem('dailyprompt_theme', theme);
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
@@ -320,23 +342,32 @@ export default function App() {
   }, [reset, requestPrompt]);
 
   return (
-    <div className="app">
-      <Header theme={theme} onToggleTheme={toggleTheme} />
+    <div className="app-container">
+      <Header theme={theme} onToggleTheme={toggleTheme} currentView={currentView} onViewChange={setCurrentView} />
 
       <main className="main-content">
-        {status !== 'exhausted' && (
-          <HeroSection
-            stats={stats}
-            status={status}
-            onRequestPrompt={requestPrompt}
-            onNextPrompt={handleRetry}
-          />
-        )}
+        {currentView === 'daily' ? (
+          <>
+            <HeroSection
+              stats={stats}
+              status={status}
+              onRequestPrompt={requestPrompt}
+              onNextPrompt={handleRetry}
+            />
 
-        {status === 'loading' && <LoadingState />}
-        {status === 'revealed' && prompt && <PromptCard prompt={prompt} />}
-        {status === 'error' && <ErrorState error={error} onRetry={handleRetry} />}
-        {status === 'exhausted' && <ExhaustedState stats={stats} />}
+            <div className="prompt-display-area" aria-live="polite">
+              {status === 'idle' && (
+                <div style={{ height: '300px' }} aria-hidden="true" />
+              )}
+              {status === 'loading' && <LoadingState />}
+              {status === 'revealed' && prompt && <PromptCard prompt={prompt} />}
+              {status === 'exhausted' && <ExhaustedState stats={stats} />}
+              {status === 'error' && <ErrorState error={error} onRetry={handleRetry} />}
+            </div>
+          </>
+        ) : (
+          <ValidatorView />
+        )}
       </main>
 
       <Footer />

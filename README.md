@@ -10,6 +10,7 @@
 - **Atomic Selection**: Proprietary selection logic using PostgreSQL `SKIP LOCKED` to ensure prompts are served exactly once across all sessions.
 - **Neon Codex UI**: A premium, "cyber-grimoire" inspired interface with typewriter reveals, theme toggling, and rich micro-animations.
 - **Prompt Coach Mode**: Enhanced "Try on Claude" integration that prepends a professional prompt engineering pedagogy to help users learn the anatomy of elite prompts.
+- **Custom Prompt Validator**: A dedicated testing laboratory where users can input their own prompts for grading and structural analysis, featuring a "Step-by-Step" confirmation flow.
 - **One-Click Execution**: Integrated functionality that pre-fills specialized prompts into the Claude.ai chat interface.
 - **Flexible Reliability**: Built-in support for both PostgreSQL (Production/High Concurrency) and SQLite (Local Development/Lite Deployment).
 
