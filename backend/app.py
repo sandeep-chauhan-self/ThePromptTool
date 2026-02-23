@@ -23,10 +23,11 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
 
-    # CORS — allow frontend origin
-    CORS(app, origins=[
-        app.config["FRONTEND_URL"],
-    ], methods=["GET", "OPTIONS"], allow_headers=["Content-Type"])
+    # CORS — allow frontend origin(s)
+    frontend_urls = app.config["FRONTEND_URL"]
+    origins = [url.strip() for url in frontend_urls.split(",")] if frontend_urls else ["http://localhost:5173"]
+    
+    CORS(app, origins=origins, methods=["GET", "OPTIONS"], allow_headers=["Content-Type"])
 
     # Register blueprints
     from routes.prompt import prompt_bp
