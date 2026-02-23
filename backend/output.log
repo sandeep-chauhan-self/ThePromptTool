@@ -1,0 +1,12 @@
+C:\Users\scst1\2025\ThePromptTool\backend\migrate_to_postgres.py:34: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  if not Prompt.query.get(row_dict["id"]):
+C:\Users\scst1\2025\ThePromptTool\backend\migrate_to_postgres.py:44: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  existing = AppState.query.get(row_dict["key"])
+C:\Users\scst1\2025\ThePromptTool\backend\migrate_to_postgres.py:56: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  if not ServeLog.query.get(row_dict["id"]):
+Creating tables in Postgres...
+Reading from C:\Users\scst1\2025\ThePromptTool\backend\dailyprompt.db...
+Found 64 prompts in SQLite.
+Successfully inserted 0 new prompts.
+PostgreSQL sequences updated.
+Migration complete!
