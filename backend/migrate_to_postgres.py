@@ -24,13 +24,9 @@ def migrate():
     print(f"Loaded {len(prompts)} prompts from SQLite.")
 
     if prompts:
-        # Create columns string
         cols = list(prompts[0].keys())
-        # The schema might have system_prompt column now
-        
         values = []
         for p in prompts:
-            # Handle booleans
             row = []
             for col in cols:
                 val = p[col]
@@ -42,13 +38,16 @@ def migrate():
         insert_query = f"""
             INSERT INTO prompts ({', '.join(cols)})
             VALUES %s
-            ON CONFLICT (id) DO UPDATE SET
+            ON CONFLICT (source_slug) DO UPDATE SET
                 title = EXCLUDED.title,
+                description = EXCLUDED.description,
                 prompt_body = EXCLUDED.prompt_body,
-                system_prompt = EXCLUDED.system_prompt
+                system_prompt = EXCLUDED.system_prompt,
+                category = EXCLUDED.category,
+                source_url = EXCLUDED.source_url
         """
         execute_values(pg_cur, insert_query, values)
-        print("Inserted/Updated prompts in PostgreSQL.")
+        print("Inserted/Updated prompts in PostgreSQL (Deduped by source_slug).")
 
     # 2. App State
     sqlite_cur.execute("SELECT * FROM app_state")

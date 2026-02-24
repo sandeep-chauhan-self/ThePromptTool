@@ -40,7 +40,10 @@ Write a short paragraph (4-6 sentences) explaining the overall prompt design phi
 STEP 5 — HOW TO WRITE ONE LIKE IT:
 Give the user a reusable template they could follow to write a similar prompt for a different use case. Use placeholder labels like [ROLE], [TASK], [CONTEXT], [CONSTRAINTS], [INPUT VARIABLES], [OUTPUT FORMAT].
 
-STEP 6 — EXECUTE THE PROMPT:
+STEP 6 — REWRITE THE PROMPT:
+Rewrite the prompt following the instructions given in STEP 5.
+
+STEP 7 — EXECUTE THE PROMPT:
 After completing all teaching steps above, add a divider and then actually execute the original prompt as written, responding naturally to it as you normally would.
 
 ---

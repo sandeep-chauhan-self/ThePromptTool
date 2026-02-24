@@ -94,9 +94,12 @@ def serve_next_prompt(client_ip=None, user_agent=None):
             db.session.add(next_prompt)
 
     if row is None:
-        # All prompts exhausted
-        db.session.rollback()
-        return None
+        # All prompts exhausted - RESET and LOOP
+        db.session.execute(text("UPDATE prompts SET is_served = FALSE"))
+        db.session.commit()
+        
+        # Recursive call to try again with the fresh set
+        return serve_next_prompt(client_ip=client_ip, user_agent=user_agent)
 
     # Step 2: Increment the global counter (already done for SQLite)
     if not is_sqlite:
