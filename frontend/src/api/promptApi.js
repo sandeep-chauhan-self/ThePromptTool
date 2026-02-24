@@ -63,3 +63,18 @@ export async function fetchStats() {
     };
   }
 }
+
+/**
+ * Submit a custom user prompt.
+ */
+export async function addCustomPrompt(promptData) {
+  try {
+    const { data } = await api.post('/api/prompt', promptData);
+    return { type: 'success', data };
+  } catch (error) {
+    return {
+      type: 'error',
+      error: error.response?.data?.message || error.message || 'Failed to submit prompt',
+    };
+  }
+}

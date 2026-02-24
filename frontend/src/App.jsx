@@ -8,12 +8,14 @@
 // 5. Do not add any text between TEACHING_INSTRUCTION and rawPrompt during concatenation.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { AddPromptModal } from './components/AddPromptModal';
 import { ValidatorView } from './components/ValidatorView';
 import { TEACHING_INSTRUCTION } from './constants/teachingInstruction';
 import { usePrompt } from './hooks/usePrompt';
+import './modal.css';
 
 /* ─── Header ─── */
-function Header({ theme, onToggleTheme, currentView, onViewChange }) {
+function Header({ theme, onToggleTheme, currentView, onViewChange, onOpenAddModal }) {
   return (
     <header className="header">
       <div className="header-logo">
@@ -36,14 +38,25 @@ function Header({ theme, onToggleTheme, currentView, onViewChange }) {
         </button>
       </nav>
 
-      <button
-        className="theme-toggle"
-        onClick={onToggleTheme}
-        aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-        title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      >
-        <span className="theme-toggle-icon">{theme === 'dark' ? '☀️' : '🌙'}</span>
-      </button>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <button 
+          className="action-button" 
+          onClick={onOpenAddModal}
+          title="Submit a custom prompt"
+          style={{ padding: '0.5rem 1rem' }}
+        >
+          ➕ Submit Prompt
+        </button>
+
+        <button
+          className="theme-toggle"
+          onClick={onToggleTheme}
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          <span className="theme-toggle-icon">{theme === 'dark' ? '☀️' : '🌙'}</span>
+        </button>
+      </div>
     </header>
   );
 }
@@ -320,6 +333,7 @@ export default function App() {
     return 'dark';
   });
   const [currentView, setCurrentView] = useState('daily');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Load initial prompt only on mount
   useEffect(() => {
@@ -343,7 +357,13 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <Header theme={theme} onToggleTheme={toggleTheme} currentView={currentView} onViewChange={setCurrentView} />
+      <Header 
+        theme={theme} 
+        onToggleTheme={toggleTheme} 
+        currentView={currentView} 
+        onViewChange={setCurrentView} 
+        onOpenAddModal={() => setIsAddModalOpen(true)}
+      />
 
       <main className="main-content">
         {currentView === 'daily' ? (
@@ -371,6 +391,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <AddPromptModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
     </div>
   );
 }
