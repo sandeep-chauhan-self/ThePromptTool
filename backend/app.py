@@ -24,9 +24,14 @@ def create_app():
     db.init_app(app)
 
     # CORS — allow frontend origin(s)
-    frontend_urls = app.config["FRONTEND_URL"]
-    origins = [url.strip() for url in frontend_urls.split(",")] if frontend_urls else ["http://localhost:5173"]
-    
+    frontend_urls = app.config.get("FRONTEND_URL")
+    if frontend_urls and frontend_urls.strip() != "*":
+        # Remove trailing slashes and split by comma
+        origins = [url.strip().rstrip('/') for url in frontend_urls.split(",")]
+    else:
+        # Fallback to wildcard or localhost
+        origins = ["http://localhost:5173", "http://localhost:5174", "https://the-prompt-tool.vercel.app", "*"]
+
     CORS(app, origins=origins, methods=["GET", "OPTIONS"], allow_headers=["Content-Type"])
 
     # Register blueprints
